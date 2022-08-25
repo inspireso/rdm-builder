@@ -84,10 +84,10 @@ jobs:
         version: '5.15.1'
         modules: 'qtcharts'
 
-    - name : fix compilation
-      run: |
-        cd rdm/3rdparty/qredisclient/3rdparty/hiredis
-        git apply ../hiredis-win.patch
+#     - name : fix compilation
+#       run: |
+#         cd rdm/3rdparty/qredisclient/3rdparty/hiredis
+#         git apply ../hiredis-win.patch
 
     - name: install zlib
       run: |
@@ -209,7 +209,7 @@ jobs:
 
   build_on_osx:
     needs: create_release
-    runs-on: macos-11
+    runs-on: macos-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -247,29 +247,29 @@ jobs:
     - name: setup python
       run: |
         brew unlink python@3.10
-        brew unlink python@3.9
         brew reinstall python@3.9
         brew link --overwrite python@3.9
+        brew link python3
 
     # install QT   
     - name: install QT
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with: 
         version: '5.15.1'
         modules: 'qtcharts'
         setup-python: 'false'
-    
+
     - name: copy info.plist
       run: |
         cd rdm
         cd ./src && cp ./resources/Info.plist.sample ./resources/Info.plist
-    
+
 #     - name: setup python
 #       run: |
 #         brew unlink python@3.10
 #         brew install python@3.9
 #         brew link --overwrite python@3.9
-    
+
     # 使用私有库,egg-links时-t不能同时使用，--user解决权限问题
     # https://github.com/UnitedIncome/serverless-python-requirements/issues/240
     # https://github.com/pypa/pip/issues/4390
